@@ -1,0 +1,8 @@
+// package.json
+
+{
+  "scripts": {
+    "test": "mocha"
+  },
+  // other configurations...
+}
