@@ -41,15 +41,16 @@ pipeline {
             }
         }
                     stage('Update nvm') {
-                    steps {
-                    script {
-                 // Update nvm using Git
+            steps {
+                script {
+                    // Update nvm using Git
                     dir(NVM_DIR) {
                         sh 'git pull origin master' // You may need to change the branch name if it's different
                     }
 
-                    // Source nvm.sh
-                    sh ". ${NVM_SH}"
+                    // Set NVM_DIR and source nvm.sh directly
+                    env.PATH = "${NVM_DIR}:${env.PATH}"
+                    sh "source ${NVM_SH}"
 
                     // Install or use the desired Node.js version
                     sh "nvm install ${NODEJS_VERSION}"
