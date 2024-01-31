@@ -12,31 +12,25 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Update nvm') {
             steps {
                 script {
-                    def npmCMD = 'npm'
-                    def nodeCMD = 'node'
-
-                    // Use Node Version Manager (nvm) to manage Node.js versions
-                    if (isUnix()) {
-                        // Install nvm
-                        sh 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash'
-                        sh 'export NVM_DIR="$HOME/.nvm"'
-                        sh '[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"'
-
-                        // Install Node.js
-                        sh "nvm install ${NODEJS_VERSION}"
-                        // sh "nvm use ${NODEJS_VERSION}"
-
-                        // Set the npm and node commands to use the installed versions
-                        npmCMD = "${NVM_BIN}/npm"
-                        nodeCMD = "${NVM_BIN}/node"
-                    } else {
-                        // For Windows, you might need to adjust the installation process
-                        // Refer to nvm documentation for Windows: https://github.com/nvm-sh/nvm#windows
+                    // Update nvm using Git
+                    dir("$HOME/.nvm") {
+                        sh 'git pull origin master' // You may need to change the branch name if it's different
                     }
 
+                    // Source nvm.sh
+                    sh '. "$HOME/.nvm/nvm.sh"'
+
+                    // Install or use the desired Node.js version
+                    sh "nvm install ${NODEJS_VERSION}"
+                    sh "nvm use ${NODEJS_VERSION}"
+
+                    // Set the npm and node commands to use the installed versions
+                    def npmCMD = "${NVM_BIN}/npm"
+                    def nodeCMD = "${NVM_BIN}/node"
+                    
                     // Install Node.js dependencies
                     sh "${npmCMD} install"
                 }
@@ -58,11 +52,14 @@ pipeline {
                     // Additional steps for building and deploying your Node.js application
                     // For example, you might want to bundle your application or push it to a server
                     // Modify this stage based on your specific deployment needs
-                    echo "Build and deploy stage"
                 }
             }
         }
     }
 
-   
+    post {
+        always {
+            // Cleanup steps, if needed
+        }
+    }
 }
