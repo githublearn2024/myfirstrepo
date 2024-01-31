@@ -58,14 +58,11 @@ pipeline {
                     // Additional steps for building and deploying your Node.js application
                     // For example, you might want to bundle your application or push it to a server
                     // Modify this stage based on your specific deployment needs
+                    echo "Build and deploy stage"
                 }
             }
         }
     }
 
-    post {
-        always {
-            // Cleanup steps, if needed
-        }
-    }
+   
 }
