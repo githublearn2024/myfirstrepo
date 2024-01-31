@@ -40,6 +40,30 @@ pipeline {
                 }
             }
         }
+                    stage('Update nvm') {
+                    steps {
+                    script {
+                 // Update nvm using Git
+                    dir(NVM_DIR) {
+                        sh 'git pull origin master' // You may need to change the branch name if it's different
+                    }
+
+                    // Source nvm.sh
+                    sh ". ${NVM_SH}"
+
+                    // Install or use the desired Node.js version
+                    sh "nvm install ${NODEJS_VERSION}"
+                    sh "nvm use ${NODEJS_VERSION}"
+
+                    // Set the npm and node commands to use the installed versions
+                    def npmCMD = "${NVM_BIN}/npm"
+                    def nodeCMD = "${NVM_BIN}/node"
+                    
+                    // Install Node.js dependencies
+                    sh "${npmCMD} install"
+                }
+            }
+        }
         stage('Run Tests') {
             steps {
                 script {
