@@ -27,7 +27,7 @@ pipeline {
 
                         // Install Node.js
                         sh "nvm install ${NODEJS_VERSION}"
-                        sh "nvm use ${NODEJS_VERSION}"
+                        // sh "nvm use ${NODEJS_VERSION}"
 
                         // Set the npm and node commands to use the installed versions
                         npmCMD = "${NVM_BIN}/npm"
