@@ -1,7 +1,13 @@
-// app.js
+const express = require('express');
 
-function addNumbers(a, b) {
-  return a + b;
-}
+const app = express();
+const port = 3000;
 
-module.exports = addNumbers;
+app.get('/', (req, res) => {
+  const message = "Hello, from Jenkins!";
+  res.send(message);
+});
+
+app.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
+});
